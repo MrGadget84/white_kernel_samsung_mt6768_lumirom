@@ -339,7 +339,7 @@ const struct cred *get_task_cred(struct task_struct *task)
 			inc_test = rocred_uc_inc_not_zero(cred);
 		}
 		else
-			inc_test = atomic_inc_not_zero(&((struct cred *)cred)->usage);
+			inc_test = atomic_long_inc_not_zero(&((struct cred *)cred)->usage);
 	} while (!inc_test);
 #elif defined(CONFIG_RUSTUH_KDP_CRED)
 	do {
@@ -348,7 +348,7 @@ const struct cred *get_task_cred(struct task_struct *task)
 		if (is_kdp_protect_addr((unsigned long)cred))
 			inc_test = ROCRED_UC_INC_NOT_ZERO(cred);
 		else
-			inc_test = atomic_inc_not_zero(&((struct cred *)cred)->usage);
+			inc_test = atomic_long_inc_not_zero(&((struct cred *)cred)->usage);
 	} while (!inc_test);
 #else
 	do {
