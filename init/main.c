@@ -89,6 +89,10 @@
 #include <linux/cache.h>
 #include <linux/rodata_test.h>
 
+#ifdef CONFIG_RUSTUH_RKP
+#include <linux/rkp.h>
+#endif
+
 #ifdef CONFIG_SEC_BOOTSTAT
 #include <linux/sec_ext.h>
 #endif
@@ -686,7 +690,7 @@ asmlinkage __visible void __init start_kernel(void)
 	boot_cpu_init();
 	page_address_init();
 	pr_notice("%s", linux_banner);
-#if defined(CONFIG_UH_RKP) || defined(CONFIG_RUSTUH_RKP)
+#ifdef CONFIG_UH_RKP
 	rkp_robuffer_init();
 #endif
 	setup_arch(&command_line);
@@ -722,7 +726,7 @@ asmlinkage __visible void __init start_kernel(void)
 	sort_main_extable();
 	trap_init();
 	mm_init();
-#if defined(CONFIG_UH_RKP) || defined(CONFIG_RUSTUH_RKP)
+#ifdef CONFIG_UH_RKP
 	rkp_init();
 #endif
 #ifdef CONFIG_RUSTUH_KDP
