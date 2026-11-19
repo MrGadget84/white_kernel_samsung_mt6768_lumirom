@@ -387,12 +387,7 @@ void dump_tasks(struct mem_cgroup *memcg, const nodemask_t *nodemask)
 	struct task_struct *task;
 
 #if defined(CONFIG_SWAP)
-	unsigned long swap_orig_nrpages;
-	unsigned long swap_comp_nrpages;
 	unsigned long task_swap;
-
-	swap_orig_nrpages = get_swap_orig_data_nrpages();
-	swap_comp_nrpages = get_swap_comp_pool_nrpages();
 	pr_info("[ pid ]   uid  tgid total_vm total_rss (   rss     swap  ) pgtables_bytes swapents oom_score_adj name\n");
 #else
 	pr_info("[ pid ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name\n");
@@ -413,8 +408,7 @@ void dump_tasks(struct mem_cgroup *memcg, const nodemask_t *nodemask)
 		}
 
 #if defined(CONFIG_SWAP)
-		task_swap = get_mm_counter(task->mm, MM_SWAPENTS) *
-				swap_comp_nrpages / swap_orig_nrpages;
+		task_swap = get_mm_counter(task->mm, MM_SWAPENTS);
 		pr_info("[%5d] %5d %5d %8lu  %8lu (%8lu %8lu) %8ld %8lu         %5hd %s\n",
 #else
 		pr_info("[%5d] %5d %5d %8lu %8lu %8ld %8lu         %5hd %s\n",
