@@ -2397,7 +2397,11 @@ static bool has_locked_children(struct mount *mnt, struct dentry *dentry)
 		if (!is_subdir(child->mnt_mountpoint, dentry))
 			continue;
 
+#if defined(CONFIG_KDP_NS) || defined(CONFIG_RUSTUH_KDP_NS)
+		if (child->mnt->mnt_flags & MNT_LOCKED)
+#else
 		if (child->mnt.mnt_flags & MNT_LOCKED)
+#endif
 			return true;
 	}
 	return false;
