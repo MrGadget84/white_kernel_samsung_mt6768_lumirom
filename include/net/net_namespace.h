@@ -8,6 +8,7 @@
 #include <linux/atomic.h>
 #include <linux/refcount.h>
 #include <linux/workqueue.h>
+#include <linux/rcupdate.h>
 #include <linux/list.h>
 #include <linux/sysctl.h>
 
@@ -301,6 +302,15 @@ static inline struct net *read_pnet(const possible_net_t *pnet)
 {
 #ifdef CONFIG_NET_NS
 	return pnet->net;
+#else
+	return &init_net;
+#endif
+}
+
+static inline struct net *read_pnet_rcu(const possible_net_t *pnet)
+{
+#ifdef CONFIG_NET_NS
+	return rcu_dereference(pnet->net);
 #else
 	return &init_net;
 #endif
